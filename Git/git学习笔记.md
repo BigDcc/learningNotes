@@ -10,7 +10,7 @@
 《GitHub入门与实践》
 《Pro Git 2nd Edition》
 
-## 1 Git入门与基础操作
+## 1 Git入门与设置
 
 ### 1.1 Git简介
 
@@ -159,7 +159,14 @@ git help config  # 获得全面的帮助信息
 git config -h  # 获得command命令参数的快速参考
 ```
 
-#### 1.4.2 git初始化
+### 1.5 Git仓库获取
+
+通常有两种获取 Git 项目仓库的方式：
+
+1. 将尚未进行版本控制的本地目录转换为 Git 仓库；
+2. 从其它服务器 克隆 一个已存在的 Git 仓库；
+
+#### 1.5.1 git init
 
 要是用Git进行版本控制，首先要进行仓库初始化，Git通过`git init`进行仓库初始化，如下所示：
 
@@ -174,9 +181,29 @@ git init
 
 当然初始化一个仓库的另一种方式就是`clone`一个别人的仓库，这样也可以拥有一个仓库。
 
-#### 1.4.3 git仓库状态
+#### 1.5.2 git clone
+
+克隆操作支持多种协议，它可以将远程仓库的数据全部拉取到本地，包括.git文件夹，这样我们在获取数据的同时，也就获取到了一个Git仓库，克隆操作支持多种协议，以下演示从GitHub上通过https协议获取一个远程仓库。
+
+```shell
+git clone https://github.com/BigDcc/learningNotes.git  # 获取名为learningNotes的仓库
+```
+
+克隆时也可以为仓库指定名称，语法如下：
+
+```shell
+git clone https://github.com/BigDcc/learningNotes.git  demo # 获取名为learningNotes的仓库,并将learningNotes改为demo
+```
+### 1.6  git仓库状态
 
 整个的命令操作流程是基于Git结构的。即1.3中的介绍。（这里提示一下，工作区，缓存区，版本库），工作树和仓库在被操作的过程当中，状态会不断的发生变化，git通过`git status`实时的查看仓库的变化。
+
+
+## 2 Git基础操作
+
+### 2.1 git add操作
+
+`git add`命令使用文件或目录的路径作为参数；如果参数是目录的路径，该命令将递归地跟踪该目录下的所有文件。主要作用是将未跟踪的文件变为已跟踪文件，并提交缓存区，以及将当前修改的文件提交到缓存区。
 
 ## github
 
