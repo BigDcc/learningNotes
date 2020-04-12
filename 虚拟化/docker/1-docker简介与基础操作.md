@@ -1,14 +1,6 @@
-# docker学习笔记（一） docker基础
+# 1-docker简介与基础操作
 
 [TOC]
-
-## 0 前言
-
-**参考资料**
-
-- 《深入浅出docker》
-- 《第一本Docker书》
-- 《docker技术入门与实战》
 
 ## 1 docker简介
 
@@ -48,65 +40,35 @@ Docker是现代容器技术中的一种，意味着现代容器技术有很多�
 - Docker从17.03 版本之后分为 CE（Community Edition: 社区版） 和 EE（Enterprise Edition: 企业版），我们用社区版就可以了；
 - docker基于go语言,采用C/S架构；
 
-### 1.2 Docker简介
-
-####  1.2.1 Docker架构简介
-
-> 类似于js一样，容器有多种实现，所以出现了OCI组织来发布标准，规范容器基础架构中的基础组件，不同的容器实现技术去实现这些规范，来保证
-
-> ce 社区版
-> ee 企业版
-- docker
 ![docker架构](./res/01.png)
 
-查看docker是否正确安装，使用如下命令，可输出容器和镜像数量，docker基本配置信息等。
+### 1.2 Docker简介
 
-Docker 客户端(Client)
-	
-
-Docker 客户端通过命令行或者其他工具使用 Docker SDK (https://docs.docker.com/develop/sdk/) 与 Docker 的守护进程通信。
-
-Docker 主机(Host)
-	
-
-一个物理或者虚拟的机器用于执行 Docker 守护进程和容器。
-
-Docker Registry
-
-```shell
-docker info
-```
-Docker 使用客户端-服务器 (C/S) 架构模式，使用远程API来管理和创建Docker容器。
-
-![](2020-04-07-23-06-28.png)
-
-![](2020-04-07-23-07-24.png)
-
-![](2020-04-07-23-07-42.png)
-
-![](2020-04-07-23-08-47.png)
+#### 1.2.1 Docker架构简介
 
 #### 1.2.3 镜像的基础概念
 
 1. Docker 镜像是用于创建 Docker容器的模板（docker镜像可以看做是类，而容器可以看做是类的对象），一个镜像可以生成一个或多个容器；
-2. 镜像由多层组成，每层叠加后，从外部看起来就像是一个独立的对象，镜像主要由以下几部分构成；
-3. Docker的每个镜像都有自己的唯一ID，我们可以通过引用镜像的ID或者镜像的名称来使用镜像；
-4. 镜像是分层的，当不同的镜像包括相同的层时，本地仅存储了层的一份内容，减小了存储空间;  
+2. 镜像由多层组成，每层叠加后，从外部看起来就像是一个独立的对象，当不同的镜像包括相同的层时，本地仅存储了层的一份内容，减小了存储空间；
+3. Docker的每个镜像都有自己的唯一ID，我们可以通过引用镜像整体的ID或者镜像的名称来使用镜像；
 
 #### 1.2.4 容器的基础概念
 
-1. 容器是基于镜像启动的，一个容器中可以运行一个或者多个应用程序的进程；
-2. 容器是独立运行的一个或一组应用，以及它们的运行态环境；
-3. Docker 容器通过 Docker 镜像来创建。
+1. 容器是基于镜像启动的，即Docker 容器通过 Docker 镜像来创建；
+2. 一个容器中可以运行一个或者多个应用程序的进程（容器是独立运行的一个或一组应用，以及它们的运行态环境）；
+3. Docker 运行容器前需要本地存在对应的镜像，如果镜像不存在本地，Docker 会从镜像仓库下载（默认是 从Docker Hub 公共注册服务器中的仓库下载，也可以设置自定义镜像仓库进行下载）;
+4. 容器与镜像不同的地方是，镜像是静态的只读文件，而容器带有运行时需要的可写文件层，同时容器中的应用进程处于运行状态（镜像是只读的，容器在启动的时候创建一层可写层作为最上层）；
+5. 容器的唯一标识是短UUID或者 长UUID， 或者容器的名称，三者都是可以唯一的标识一个容器的；
+6. docker在每次容器创建的时候，都会为这个容器生成一个随机的名称，
 
 #### 1.2.5 仓库的基础概念
 
-1. Docker 仓库用来保存镜像，可以理解为代码控制中的代码仓库。
+1. Docker 仓库用来保存镜像，可以理解为代码控制中的代码仓库；
 2. 仓库注册服务器上往往存放着多个仓库，每个仓库中又包含了多个镜像，每个镜像有不同的标签（tag），用于区分镜像；
 3. 目前Docker Hub这个注册服务器上维护着大量的仓库，是当前最大的镜像存放服务器，其地址为：<https://hub.docker.com>；
 4. Docker Hub中的仓库大致分为两类，一类为官方维护的顶层仓库(其中的镜像被称为根镜像)，一类为用户自己的用户仓库，用户仓库通常的命名为userName/registorName;
 5. 通常，一个仓库会包含同一个软件不同版本的镜像，而标签就常用于对应该软件的各个版本。我们可以通过 <仓库名>:<标签> 的格式来指定具体是这个软件哪个版本的镜像。如果不给出标签，将以 latest 作为默认标签；
-  
+
 ![仓库架构](./res/06.png)
 
 ### 1.3 安装Docker
@@ -121,11 +83,11 @@ Docker 使用客户端-服务器 (C/S) 架构模式，使用远程API来管理�
 
 2. 需要启用操作系统的Hyper-V和容器特性，并且BIOS设置中需要开启硬件虚拟化支持（教新的电脑，一般都是默认支持和开启的）。
 
-> 注： 
->  
-> 开启容器特性和Hyper-v 的方式：  
-> 
-> 应用和功能 -> 程序和功能 -> 启用或关闭windows功能 -> 确认Hyper-V和容器已勾选。 
+> 注：
+>
+> 开启容器特性和Hyper-v 的方式：
+>
+> 应用和功能 -> 程序和功能 -> 启用或关闭windows功能 -> 确认Hyper-V和容器已勾选。
 
 #### 1.3.2 linux下安装docker
 
@@ -203,16 +165,6 @@ Options:
 
 ## 2 镜像，容器，仓库的基本操作
 
-- docker运行容器前需要在本地存在对应的镜像，如果镜像不存在，docker会尝试先从默认镜像仓库下载（默认使用docker hub公共注册服务器中的仓库），用户也可以通过配置，使用自定义的镜像仓库；
-- 镜像是只读的，容器在启动的时候创建一层可写层作为最上层
-- 
-
-/var/lib/docker
-
-```shell
-docker container ls #查看正在运行中的容器
-```
-
 ### 2.1 镜像
 
 docker镜像是由文件系统叠加而成的，最底层是一个引导文件系统，即bootfs，第二层是root文件系统rootfs，rootfs可以是一种或者多种操作系统。
@@ -229,11 +181,11 @@ REPOSITORY          TAG                 IMAGE ID            CREATED             
 ubuntu              18.04               4e5021d210f6        3 days ago          64.2MB
 ```
 
-> **REPOSITORY** : 镜像来源于哪一个仓库  
-> **TAG** : 镜像标签，用于标识同一个仓库的不同镜像  
-> **IMAGE ID** ： 镜像的ID，唯一标识镜像， ID相同证明指向了同一个镜像  
-> **CREATE** ： 镜像最后的更新时间  
-> **SIZE** ： 镜像的大小，由于docker会复用不同镜像中的相同的层，所以实际大小比该值小  
+> **REPOSITORY** : 镜像来源于哪一个仓库
+> **TAG** : 镜像标签，用于标识同一个仓库的不同镜像
+> **IMAGE ID** ： 镜像的ID，唯一标识镜像， ID相同证明指向了同一个镜像
+> **CREATE** ： 镜像最后的更新时间
+> **SIZE** ： 镜像的大小，由于docker会复用不同镜像中的相同的层，所以实际大小比该值小
 
 #### 2.1.2 获取镜像
 
@@ -254,10 +206,10 @@ docker pull ubuntu:18.04
 $ docker pull ubuntu:18.04
 --------------------------------------------------------------------------------
 18.04: Pulling from library/ubuntu
-5bed26d33875: Pull complete 
-f11b29a9c730: Pull complete 
-930bda195c84: Pull complete 
-78bf9a5ad49e: Pull complete 
+5bed26d33875: Pull complete
+f11b29a9c730: Pull complete
+930bda195c84: Pull complete
+78bf9a5ad49e: Pull complete
 Digest: sha256:bec5a2727be7fff3d308193cfde3491f8fba1a2ba392b7546b43a051853a341d
 Status: Downloaded newer image for ubuntu:18.04
 docker.io/library/ubuntu:18.04
@@ -355,8 +307,8 @@ $ Untagged: myubuntu:gaga  # 成功删除时的提示
 ```
 
 **注意事项：**
->  1）当一个镜像在本地有多个别名的时候，删除并不会影响其他的别名，他们依然引用原有的镜像。  
-> 2）适用参数`-f`,可以强制删除拥有容器的镜像。  
+>  1）当一个镜像在本地有多个别名的时候，删除并不会影响其他的别名，他们依然引用原有的镜像。
+> 2）适用参数`-f`,可以强制删除拥有容器的镜像。
 
 通过`prune`可以删除临时镜像，配合参数`-f`参数，可以将无用镜像也全部删除。
 
@@ -366,38 +318,108 @@ docker image prune -f
 
 ### 2.2 容器
 
-#### 2.2.1 容器使用前的注意事项
+#### 2.2.1 涉及容器生命周期操作
 
-1. Docker 运行容器前需要本地存在对应的镜像，如果镜像不存在本地，Docker 会从镜像仓库下载（默认是 从Docker Hub 公共注册服务器中的仓库下载，也可以设置自定义镜像仓库进行下载）;
-2. 容器是独立运行的一个或一组应用，是镜像运行时的实体；
-3. 容器的唯一标识是短UUID或者 长UUID， 或者容器的名称，三者都是可以唯一的标识一个容器的；
+##### 2.2.1.1 容器的创建和运行
 
-#### 2.2.2 容器的创建及启停操作
+创建容器的方式主要有两种，一种是先创建后运行，一种是创建和运行一起进行。
 
-##### 2.2.2.1 容器的创建和运行
-
-通过`create`命令可以创建一个容器，具体演示如下：
+通过`create`命令可以创建一个容器(通过该命令创建的容器处于停止状态)，具体演示如下：
 
 ```console
 docker create [OPTIONS] IMAGE [COMMAND] [ARG...]
+-------------------------------------------------------------------------------
+docker create -it --name achui_test_con ubuntu:18.04
 ```
 
-```shell
-docker run -it 
+通过`start`命令开运行一个处于停止状态的容器
+
+```console
+Usage:  docker start [OPTIONS] CONTAINER [CONTAINER...]
+
+Start one or more stopped containers
+
+Options:
+  -a, --attach               Attach STDOUT/STDERR and forward signals
+      --detach-keys string   Override the key sequence for detaching a container
+  -i, --interactive          Attach container's STDIN
+```
+
+通过`run`命令创建一个容器，并运行，演示如下所示：
+
+```console
+docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
+-------------------------------------------------------------------------------
+docker run -it ubuntu:18.04 /bin/bash
 # -i 参数保证了容器中的STDIN是开启的（只有标准输入开启我们才可以进行交互）
 # -t 参数会让docker为容器分配一个伪tty终端，用于交互
-
 ```
 
-先在本地检查是否拥有该镜像，没有的话会去默认的官方仓库中拉取对应的镜像
+##### 2.2.1.2 创建守护容器
 
-##### 2.2.2.3 创建守护式容器
+通过`d`参数，来将容器放到后台运行，即守护式容器，守护式容器没有交互式会话，非常适合运行应用程序和服务，大多数时候我们都需要以守护式来运行我们的容器；
 
-- 守护式容器没有交互式会话，非常适合运行应用程序和服务，大多数时候我们都需要以守护式来运行我们的容器；
-- 通过`d`参数，来将容器放到后台运行，即守护式容器；
-- 
+##### 2.2.1.3 容器的终止与暂停
 
-#### 2.2.2 容器查看
+通过`pause`命令暂停运行中的容器
+
+通过`unpause`命令恢复被暂停的容器
+
+通过`stop`命令终止一个容器的运行
+
+##### 2.2.1.4 删除容器
+
+```console
+Usage:  docker rm [OPTIONS] CONTAINER [CONTAINER...]
+
+Remove one or more containers
+
+Options:
+  -f, --force     Force the removal of a running container (uses SIGKILL)
+  -l, --link      Remove the specified link
+  -v, --volumes   Remove anonymous volumes associated with the container
+```
+
+默认情况下`rm`命令，只能删除已终止或者已退出的容器，但是可以通过`f`参数，强制删除正在运行当中的容器
+
+#### 2.2.2 附着到容器
+
+##### 2.2.2.1 attach命令
+
+```console
+Usage:  docker attach [OPTIONS] CONTAINER
+
+Attach local standard input, output, and error streams to a running container
+
+Options:
+      --detach-keys string   Override the key sequence for detaching a container
+      --no-stdin             Do not attach STDIN
+      --sig-proxy            Proxy all received signals to the process (default true)
+```
+
+当多个窗口中使用attach命令，附着到同一个容器的时候，所有的窗口都会同步显示，当某个窗口因命令阻塞时，其他窗口也无法执行其他操作。
+
+##### 2.2.2.2 exec命令
+
+```console
+Usage:  docker exec [OPTIONS] CONTAINER COMMAND [ARG...]
+
+Run a command in a running container
+
+Options:
+  -d, --detach               Detached mode: run command in the background
+      --detach-keys string   Override the key sequence for detaching a container
+  -e, --env list             Set environment variables
+  -i, --interactive          Keep STDIN open even if not attached
+      --privileged           Give extended privileges to the command
+  -t, --tty                  Allocate a pseudo-TTY
+  -u, --user string          Username or UID (format: <name|uid>[:<group|gid>])
+  -w, --workdir string       Working directory inside the container
+```
+
+exec的好处就是不会影响其他链接到该容器的用户
+
+#### 2.2.3 容器状态与进程查看
 
 通过`ps`命令可以查看当前容器的列表信息，具体用法如下所示：
 
@@ -407,9 +429,11 @@ docker ps -a # 查看当前系统中容器的列表
 docker ps -l  # 列出最后一次运行的容器（不管是正在运行还是已经停止了）
 ```
 
-docker在每次容器创建的时候，都会为这个容器生成一个随机的名称，
+```shell
+docker top <容器标识>
+```
 
-#### 容器的命名
+#### 2.2.4 容器的命名
 
 在创建容器的时候，如果不显示的为容器指定一个名称，Docker会随机的为容器起一个名称，用于标识容器，使用参数`name`,可以在创建新容器时，为容器指定名称，而不是通过docker随机赋予，注意起名时应该注意命名规范，名称由大小写字母，数字，下划线和横线，圆点组成。容器的名称具有唯一性。如下所示：
 
@@ -417,48 +441,69 @@ docker在每次容器创建的时候，都会为这个容器生成一个随机�
 docker run --name ahcui_container -it ubuntu:18.04
 ```
 
-#### 容器的启动
 
-一个已经创建的容器，如果处于停止状态，我们可以通过以下命令来重新启动它。
 
-```shell
-docker start <容器标识>
-docker start achui_container  # 启动一个名为achui_container的容器
+#### 2.2.5 导入和导出容器
+
+导入和到出容器主要的作用是迁移容器
+
+通过`export`命令可以导出任何状态的容器
+
+```console
+
+Usage:  docker export [OPTIONS] CONTAINER
+
+Export a container's filesystem as a tar archive
+
+Options:
+  -o, --output string   Write to a file, instead of STDOUT  # 用来指定导出的tar文件的文件名
 ```
 
-#### 进入守护容器
+通过`import`命令可以导入打包成tar的容器，导入后的容器被生成镜像，而非可运行的容器
 
-重新附着到一个容器上
+```console
+Usage:  docker import [OPTIONS] file|URL|- [REPOSITORY[:TAG]]
 
-```shell
-docker attach <容器标识>
+Import the contents from a tarball to create a filesystem image
+
+Options:
+  -c, --change list      Apply Dockerfile instruction to the created image
+  -m, --message string   Set commit message for imported image
 ```
 
-docker logs 容器标识  # 打印容器日志
+#### 2.2.6
 
-docker top
+通过`cp`命令可以从宿主机中复制文件到容器当中去
 
-docker restart
+```console
+Usage:  docker cp [OPTIONS] CONTAINER:SRC_PATH DEST_PATH|-
+        docker cp [OPTIONS] SRC_PATH|- CONTAINER:DEST_PATH
 
-#### 容器的进程查看
+Copy files/folders between a container and the local filesystem
 
-```shell
-docker top <容器标识>
+Use '-' as the source to read a tar archive from stdin
+and extract it to a directory destination in a container.
+Use '-' as the destination to stream a tar archive of a
+container source to stdout.
+
+Options:
+  -a, --archive       Archive mode (copy all uid/gid information)
+  -L, --follow-link   Always follow symbol link in SRC_PATH
 ```
 
---restart 重启容器
+![cp演示](./res/09.png)
 
-attach 命令有时候并不方便。当多个窗口同时 attach 到同一个容器的时候，所有窗口都会同步显示。当某个窗口因命令阻塞时,其他窗口也无法执行操作了。
+通过`diff`命令可以查看容器的文件系统的变更操作
 
-exec
+通过`container port`命令可以查看容器的端口映射情况
+
+`update`更新配置
 
 ### 2.3 仓库
 
 #### 2.3.1 Docker Hub
 
 ##### 2.3.1.1 仓库与Docker Hub简介
-
-
 
 ##### 2.3.1.2  从Docker hub拉取和上传镜像
 
@@ -480,15 +525,14 @@ exec
 $ docker search jenkins
 ---------------------------------------------------------------------------
 NAME                                   DESCRIPTION                                                                 STARS               OFFICIAL            AUTOMATED
-jenkins                                Official Jenkins Docker image                                 4715                  [OK]                
-jenkins/jenkins               The leading open source automation server    1971                                    
+jenkins                                Official Jenkins Docker image                                 4715                  [OK]
+jenkins/jenkins               The leading open source automation server    1971
 -----------------------------内容太多省略---------------------------------------
 ```
 
 #### 2.3.2 第三方镜像市场
 
 #### 2.3.3 私有仓库搭建
-
 
 ## 3 数据存储
 
@@ -501,8 +545,6 @@ jenkins/jenkins               The leading open source automation server    1971
 
 数据卷类似于linux系统中的挂载行为，将宿主机的目录直接映射在容器当中。
 
-
-
 ## 4 端口映射与容器互联
 
 首先需要明确在启动容器的时候，如果不指定对应参数，在容器外部是无法通过网络来访问容器内的网络应用和服务的。
@@ -510,11 +552,4 @@ jenkins/jenkins               The leading open source automation server    1971
 ### 4.1 容器与宿主机器的端口映射
 
 在通过`create`或者`run`命令创建一个容器的时候，可以通过参数`P`或`p`来指定容器与宿主机的端口映射。
-
-- `P`
-
-
-
-
-
 
