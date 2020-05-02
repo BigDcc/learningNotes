@@ -1,0 +1,79 @@
+{
+  // 设置当前工作空间的图标
+  "workbench.iconTheme": "vscode-icons",
+  // 设置当前工作空间的主题
+  "workbench.colorTheme": "Panda Syntax",
+
+  // 终端默认shell
+  "terminal.integrated.shell.linux": "/usr/bin/zsh",
+  // 设置终端字体防止zsh在vscode中乱码
+  "terminal.integrated.fontFamily": "Menlo for Powerline",
+  
+  // Main editor
+  "editor.fontSize": 18,
+  // Terminal panel
+  "terminal.integrated.fontSize": 14,
+  // Output panel
+  "[Log]": {
+      "editor.fontSize": 15
+  },
+  // 通过特殊字体加强代码可读性，并开启字体连体
+  // https://www.168seo.cn/linux/25042.html
+  "editor.fontFamily": "Fira Code",
+  "editor.fontLigatures": true,
+  
+ 
+  // 对自动补全进行设置，在注释和字符串中不显示自动补全功能
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": false,
+    "strings": false
+  },
+  
+  
+  // 设置设置中心默认打开方式为json
+  "workbench.settings.editor": "json",
+
+  "editor.fastScrollSensitivity": 20,
+
+  // 某些设置仅针对python生效
+  "[python]": {
+
+  },
+
+  "workbench.colorCustomizations": {
+    "editorIndentGuide.background": "#0000ff"
+  },
+  "editor.tokenColorCustomizations": {
+    "semanticHighlighting": true
+},
+
+  // 不将vscode的错误报告发送给微软
+  "telemetry.enableTelemetry": false,
+  "telemetry.enableCrashReporter": false,
+
+  // 小地图中显示色块
+  "editor.minimap.renderCharacters":false,
+  // 关闭面包屑  "breadcrumbs.enabled": false,
+
+  // 控制光标样式
+  "editor.cursorBlinking": "expand", 
+  "editor.cursorStyle":"block",
+  // 选中当前行进行高亮显示
+  "editor.renderLineHighlight": "all",
+  // 渲染空格和制表符
+  "editor.renderWhitespace": "all",
+  // 值设置为true时，每次保存的时候自动格式化；
+  "editor.formatOnSave": false,
+  "files.autoSave": "afterDelay",
+   // 资源管理器中拖拽文件，不进行确认提示
+   "explorer.confirmDragAndDrop": false,
+   // 设置垂直标尺
+   "editor.rulers": [
+     80,
+     120
+   ],
+   // 重新设定tabsize
+   "editor.tabSize": 4,
+
+}

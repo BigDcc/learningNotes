@@ -33,3 +33,8 @@ VSCode 经典插件推荐
         ]
     }
 }
+
+
+
+解决Ubuntu下vscode中zsh乱码的问题
+https://www.jianshu.com/p/6f7b459d209b
