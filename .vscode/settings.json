@@ -8,7 +8,7 @@
   "terminal.integrated.shell.linux": "/usr/bin/zsh",
   // 设置终端字体防止zsh在vscode中乱码
   "terminal.integrated.fontFamily": "Menlo for Powerline",
-  
+  //更改各种UI元素的字体大小
   // Main editor
   "editor.fontSize": 18,
   // Terminal panel
@@ -75,5 +75,6 @@
    ],
    // 重新设定tabsize
    "editor.tabSize": 4,
+   
 
 }
