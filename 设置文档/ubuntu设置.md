@@ -214,6 +214,14 @@ flameshot --help  # 相关参数查看
 关于该软件的详细配置和介绍可以参考以下博客
 <https://blog.csdn.net/xinquanv1/article/details/87889407>
 
+### 3.3 安装离线文档查看器zeal
+
+```python
+sudo apt-get install zeal
+```
+
+
+
 ## 4. 结尾
 
 持续更新，欢迎补充！

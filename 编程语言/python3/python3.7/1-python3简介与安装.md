@@ -464,6 +464,8 @@ str1 = "hello world!";print(str1)
 
 ### 1.5.5 编码和文件声明
 
+默认情况下，Python 3源码文件以 UTF-8 编码，所有字符串都是 unicode 字符串。
+
 ```
 #! /usr/bin/env python3
 # - * - coding:utf-8 - * -
