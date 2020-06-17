@@ -417,7 +417,10 @@ name = ['王', '大', '锤']
 print("-".join(name.split(name)))  # res => ['王大锤']
 ```
 
-### 2.4.5 字符串格式化
+### 2.4.5 字符串格式化的5种方式
+
+> 
+
 　　两种字符串格式化的方法，如下所示：	
 
 1. 字符串格式化表达式：`’…%s…’ % (values)`
@@ -439,14 +442,87 @@ typecode的类型码如下所示（如果你不太确定应该用什么，%s永�
 	运算符右侧的值一般是元组的形式，如果左侧字符串中，指定了keyname这种形式，则右侧运算符之后可以跟字典如下所示：
 
 #### 2.4.5.2 字符串格式化方法调用
-format方法时字符串的内置方法，也是将来的标准之一。下面我们简单的介绍下这个内置方法。
+format方法是字符串的内置方法，也是将来的标准之一。下面我们简单的介绍下这个字符串类型内置方法。
 基本格式：使用{}在字符串中占位，format中的参数给出具体的值，替换占位符号。
+
+```python
+name = "achui"
+age = "18"
+
+print("hello, {} your age is {}".format(name, age))
+
+# hello, achui your age is 18
+
+print("hello, {} your age is {}".format(name=name, age=age))  # 使用别名，可以不按照顺序为字符串传入变量
+
+# hello, achui your age is 18
+
+
+
+```
+
+```python
+name = "achui"
+
+print("hello {name}")
+```
+
+
 
 	{}中可以填写数字，用于指代一定的顺序，从0开始。
 	
 	Format还支持参数名和索引的调用如下所示：
 
 Format还支持对数字等对象进行替换时，设置其格式，如下所示，了解一下即可，在web编程中并不常使用。
+
+#### 2.4.5.3 模板字符串
+
+模板字符串不是核心的语言功能，而是由标准库中的模块提供，模板字符串不能使用格式说明符，模板字符串的最佳使用场景是处理用户输入生成的格式字符串：
+
+```python
+from string import Template
+
+# Template对象有两个方法：substitute()、safe_substitute()。
+# substitute()更为严谨，在key缺少的情况下会报一个KeyError的异常。
+# safe_substitute()在缺少key的情况下，直接原封不动的把模板中的${}形式的字符串显示出来。
+
+name = "achui"
+age = 18
+
+user_info = Template("your name is ${name}, age is ${age}")
+
+print(user_info.substitute(name=name,age=age))
+
+# your name is achui, age is 18
+
+print(user_info.safe_substitute(age=age))
+
+# your name is ${name}, age is 18
+```
+
+在处理用户输入生成的格式化字符串中，普通的格式化方法可能造成安全漏洞，以下引用《深入理解python特性》书中的例子：
+
+```python
+key = "123913891238018301"
+
+class Test:
+    def __init__(self):
+        pass
+
+test = Test()
+
+user_info = "{test.__init__.__globals__[key]}"
+
+user_info.format(test=test)
+
+# "123913891238018301"
+```
+
+#### 2.4.5.4 选取合适的字符串格式化方法
+
+如何选取合适的字符串表示方法，截取《深入理解python特性》书中的建议：
+
+> 如果格式化字符串是用户提供的，使用模板字符串来避免安全问题，如果不是，再考虑python版本，python3.6+使用字符串字面值插值，老版本使用"新式"字符串格式化;
 
 ## 2.5 列表
 

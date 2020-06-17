@@ -2,13 +2,12 @@
 
 ## 1 shell的基本介绍
 
-1. Shell 既是一种脚本编程语言，也是一个连接内核和用户的软件。
+### 1.1 bash简介
+
+1. Shell 既是一种脚本编程语言，也是一个连接内核和用户的软件(解释器)。
 2. 常见的 Shell 有 sh、bash、csh、tcsh、ash 等。
-3. bash shell 是 Linux 的默认 shell
-
-
-
-Base shell 默认的提示符是美元符号$；对于超级用户（root 用户），Bash Shell 默认的提示符是井号#。该符号表示 Shell 等待输入命令。
+3. bash shell 是 Linux 的默认 shell，免费易用，功能强大。
+4. Base shell 默认的提示符是美元符号$；对于超级用户（root 用户），Bash Shell 默认的提示符是井号#。该符号表示 Shell 等待输入命令。
 
 Shell 通过PS1和PS2两个环境变量来控制提示符格式：
 PS1 控制最外层命令行的提示符格式。
@@ -233,4 +232,85 @@ length=${#array_name[*]}
 # 取得数组单个元素的长度
 lengthn=${#array_name[n]}
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 函数
+
+### 函数的基本定义
+
+```shell
+# 函数的基本结构如下所示
+# 1）关键字function可省略，建议不省略
+# 2）函数名后如不传参中括号可省略（省略时function需要保留），建议不省略
+# 3）函数体后的返回值为0～255的整数，可省略
+[ function ] funname [()]
+
+{
+
+    statement
+
+    [return int]
+
+}
+```
+
+注意：所有函数在使用前必须定义。这意味着必须将函数放在脚本开始部分，直至shell解释器首次发现它时，才可以使用。调用函数仅使用其函数名即可。
+
+
+### 函数的调用和传参
+
+函数调用直接通过函数名可以完成调用，不需要使用调用运算符`()`
+
+```shell
+function sayHello() {
+	echo "hello world!"
+}
+
+sayHello
+```
+
+如果需要给函数传参可以使用如下形式
+
+```shell
+# functionName param1 param2 param3
+
+function sayHello() {
+	echo "hello ${1} ,your age is ${2}"
+}
+
+sayHello achui 18
+```
+
+函数参数是 Shell 位置参数的一种，在函数内部可以使用$n来接收，例如，$1 表示第一个参数，$2 表示第二个参数，依次类推, 注意，参数n > 10时，需要使用{}划定边界，如${10}
+
 

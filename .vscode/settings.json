@@ -2,7 +2,7 @@
   // 设置当前工作空间的图标
   "workbench.iconTheme": "vscode-icons",
   // 设置当前工作空间的主题
-  "workbench.colorTheme": "Panda Syntax",
+  "workbench.colorTheme": "GitHub Plus",
 
   // 终端默认shell
   "terminal.integrated.shell.linux": "/usr/bin/zsh",

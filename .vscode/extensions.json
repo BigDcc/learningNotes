@@ -1,6 +1,18 @@
 {
     // install extension from extension-id
     "recommendations" :[
-       
+        "alefragnani.project-manager",
+        "DavidAnson.vscode-markdownlint",
+        "liviuschera.noctis",
+        "ms-azuretools.vscode-docker",
+        "MS-CEINTL.vscode-language-pack-zh-hans",
+        "ms-python.python",
+        "msjsdiag.debugger-for-chrome",
+        "mushan.vscode-paste-image",
+        "shd101wyy.markdown-preview-enhanced",
+        "tomoki1207.pdf",
+        "vscode-icons-team.vscode-icons",
+        "vscoss.vscode-ansible",
+        "yzhang.markdown-all-in-one",
     ],
 }
