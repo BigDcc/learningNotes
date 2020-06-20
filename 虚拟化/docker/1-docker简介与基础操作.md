@@ -26,7 +26,7 @@
 
 ​		容器可以理解为运行在操作系统上的用户空间，所以也被称之为操作系统级虚拟化（因为这种依赖于宿主系统内核的特性，导致容器只能运行与底层宿主系统相同或相似的操作系统）。
 
-​		以下为传统的软件虚拟化与容器的基本架构对比。
+​		以下为传统的软件虚拟化与容器的基本架构对比。(对容器发展影响比较大的技术包括内核命名空间（Kernel Namespace）、控制组（Control Group）、联合文件系统（Union File System），当然更少不了Docker)
 
 ![容器的优势](./res/02.png)
 ![容器的优势](./res/05.png)
@@ -45,9 +45,15 @@
 
 ##### 1.1.4.2 Docker的容器运行时和编排引擎
 
-​		`Docker`是一种运行在操作系统上的软件，用于创建，管理和编排容器；这是Docker一词的常见含义；
+​		`Docker`是一种运行在操作系统上的软件，用于创建，管理和编排容器；这是Docker一词的常见含义，Docker 引擎是用来运行和管理容器的核心软件，Docker引擎采用了模块化的设计原则，其组件是可替换的，Docker引擎由如下主要的组件构成：Docker客户端（Docker Client）、Docker守护进程（Docker daemon）、containerd以及runc。它们共同负责容器的创建和运行；
 
-​		Docker引擎从17.03 版本之后分为 CE（Community Edition: 社区版） 和 EE（Enterprise Edition: 企业版），我们比较常用的是社区版；
+​		`Docker引擎`从17.03 版本之后分为 CE（Community Edition: 社区版） 和 EE（Enterprise Edition: 企业版），我们比较常用的是社区版；
+
+​		`Docker`的容器的组成如下所示：
+
+​		![docker容器的组成](./res/011.png)
+
+​		围绕着`docker引擎`的生态：
 
 ![基于docker引擎的生态](./res/008.png)
 
@@ -69,9 +75,35 @@
 
 ![oci](./res/010.png)
 
-####  1.1.5 `Docker`
+####  1.1.5 Docker
 
 ​		Docker是现代容器技术中的一种，意味着现代容器技术有很多中，不仅是Docker，只是Docker比较流行，Docker是一个能够把开发的应用程序自动部署到容器中的开源引擎，在进行学习Docker前，我们先进行一些相关内容理解，如下所示：
+
+- 旧版本的Docker引擎由LXC和Docker daemon组成，daemon包含了客户端，API，容器运行时，镜像构建等，LXC提供了基于linux容器虚拟化技术的命名空间，控制组等功能。后来Docker自研了Libcontainer来代替LXC，同时Docker daemon在进一步的拆分为更小的组建，当前架构如下所示：
+
+![docker引擎](./res/012.png)
+
+		**runc：**是OCI容器运行时规范的参考实现。Docker公司参与了规范的制定以及runc的开发。去粗取精，会发现runc实质上是一个轻量级的、针对Libcontainer进行了包装的命令行交互工具（Libcontainer取代了早期Docker架构中的LXC）。runc生来只有一个作用——创建容器，这一点它非常拿手，速度很快！不过它是一个CLI包装器，实质上就是一个独立的容器运行时工具。runc可以作为独立的CLI工具来创建容器。它基于Libcontainer，也可被其他项目或第三方工具使用。
+
+仍然有许多的功能是在Do
+
+​		**containerd**：在对Docker daemon的功能进行拆解后，所有的容器执行逻辑被重构到一个新的名为containerd（发音为container-dee）的工具中。它的主要任务是容器的生命周期管理——start | stop | pause | rm....， Kubernetes也可以通过cri-containerd使用containerd。containerd最初被设计为轻量级的小型工具，仅用于容器的生命周期管理。然而，随着时间的推移，它被赋予了更多的功能，比如镜像管理。
+
+​		**daemon:**的主要功能包括镜像管理、镜像构建、REST API、身份验证、安全、核心网络以及编排，常用的启动容器的方法就是使用Docker命令行工具，一旦daemon接收到创建新容器的命令，它就会向containerd发出调用。daemon已经不再包含任何创建容器的代码了！daemon使用一种CRUD风格的API，通过gRPC与containerd进行通信。虽然名叫containerd，但是它并不负责创建容器，而是指挥runc去创建容器，他去管理容器。然后，runc与操作系统内核接口进行通信，基于所有必要的工具（Namespace、CGroup等）来创建容器。容器进程作为runc的子进程启动，启动完毕后，runc将会退出。
+
+​		ockerd(Docker daemon)、docker-containerd(containerd)、
+
+containerd(containerd)、docker-containerd-shim (shim)和docker-runc (run
+
+runc)。
+
+​		containerd指挥runc来创建新容器。事实上，每次创建容器时它都会fork一个新的runc实例。不过，一旦容器创建完毕，对应的runc进程就会退出。因此，即使运行上百个容器，也无须保持上百个运行中的runc实例。一旦容器进程的父进程runc退出，相关联的containerd-shim进程就会成为容器的父进程，作为容器的父进程，shim的部分职责如下：
+
+- 保持所有STDIN和STDOUT流是开启状态； 
+- 从而当daemon重启的时候，容器不会因为管道（pipe）的关闭而终止。
+- 将容器的退出状态反馈给daemon。
+
+​		
 
 - 运行中的容器共享宿主机的内核，意味着Linux系统下的容器，是不能在windows上应用的，但是目前windows版本下的容器，会在windows上系统上产生一个虚拟的linux系统，用来承载容器，这样本质上容器调用的还是linux的内核；
 - kubernetes是一种容器编排软件，默认采用Docker作为默认容器运行时，可以简单的理解为容器的管理软件；
@@ -79,6 +111,8 @@
 - docker基于go语言,采用C/S架构；
 
 ![docker架构](./res/01.png)
+
+
 
 ### 1.2 Docker简介
 
@@ -840,21 +874,22 @@ sudo docker run -p 5000：5000 registry
 
 ## 3 数据存储
 
+数据主要分两类，持久化和非持久化的数据，Docker中提供了对两者的支持：
+
+- 非持久化的数据依赖于容器，伴随容器的生命周期，与容器共生。（**非持久化的数据与容器一同保存在/var/lib/docker/< storage-driver >下**）
+- 持久化的数据通过数据卷进行保存，与容器解耦，可以单独的创建数据卷，而与容器的生命周期不进行绑定（通俗的讲就是删除与数据卷关联的容器，并不会使数据卷一同消亡）。
+
 ### 3.1 docker中将数据持久化的两种方式
 
-​		在docker中实现数据持久化或者多容器共享数据，主要有以下两种方式:
+在docker中实现数据持久化或者多容器共享数据，主要有以下两种方式:
 
 - 数据卷 ： 容器内数据直接映射到本地主机环境
 
-  - 数据卷（Data Volumes）是一个可供容器使用的特殊目录，它将主机操作系统目录直接映射进容器，类似于Linux中的mount行为。
+  - 数据卷（Data Volumes）是一个可供容器使用的特殊目录，它将主机操作系统目录直接映射进容器，类似于Linux中的mount行为；
 
   - 数据卷可以在容器之间共享和重用，容器间传递数据将变得高效与方便；
 
   - 对数据卷内数据的修改会立马生效，无论是容器内操作还是本地操作；
-
-  - 对数据卷的更新不会影响镜像，解耦开应用和数据；
-
-  - 卷会一直存在，直到没有容器使用，可以安全地卸载它。
 
 - 数据卷容器： 使用特定容器维护数据卷
 
@@ -881,6 +916,11 @@ Commands:
 Run 'docker volume COMMAND --help' for more information on a command.
 ```
 
+> **注意事项：**
+> - `prune`会删除跟容器没有绑定的所有闲置数据卷（**慎用**）
+> - `rm`删除指定的数据卷
+> - 两种删除命令都不能删除正在被容器使用的数据卷
+
 ​		使用`create`命令创建数据卷
 
 ```console
@@ -898,11 +938,9 @@ Options:
   -d, --driver string   Specify volume driver name (default "local")
       --label list      Set metadata for a volume
   -o, --opt map         Set driver specific options (default map[])
-
-
 ```
 
-​		查看`/var/lib/docker/volumes`路径下，会发现所创建的数据卷位置
+查看`/var/lib/docker/volumes`路径下，会发现所创建的数据卷位置
 
 #### 3.2.2 绑定数据卷
 
@@ -912,25 +950,39 @@ Options:
 - 绑定数据卷，映射到主机指定路径下（在创建容器时将主机本地的任意路径挂载到容器内作为数据卷，这种形式创建的数据卷称为绑定数据卷），类型bind
 - tmpfs：临时数据卷，只存在于内存中。
 
-本地目录的路径必须是绝对路径，容器内路径可以为相对路径。
+> **注意事项**
+> 
+> - 本地目录的路径必须是绝对路径，容器内路径可以为相对路径。
+> - 如果目录不存在，Docker会自动创建。
+> - Docker挂载数据卷的默认权限是读写（rw），用户也可以通过ro指定为只读。
+> - 所以推荐的方式是直接挂载文件所在的目录到容器内。
 
-。如果目录不存在，Docker会自动创建。
+```shell
 
-Docker挂载数据卷的默认权限是读写（rw），用户也可以通过ro指定为只读：
+# type默认为普通数据卷，可省略不写， 如果是普通数据卷，source的值直接为数据卷名称
+docker run -d -P --name test --mount type=bind,source=/home/achui,target=/opt/achui ubuntu:18.04
 
-所以推荐的方式是
+# 上述命令等价于
 
-6.2 数据卷容器
+docker run -d -P --name test -v /home/achui:/opt/achui ubuntu:18.04
+```
 
-直接挂载文件所在的目录到容器内。
-
-数据卷容器
+### 3.3 数据卷容器
 
 数据卷容器也是一个容器，但是它的目的是专门提供数据卷给其他容器挂载。
 
-### 3.1 数据卷
+```shell
 
-数据卷类似于linux系统中的挂载行为，将宿主机的目录直接映射在容器当中。
+# 挂载普通数据卷到容器中，因为数据卷不存在，直接创建数据卷并挂载
+docker run -it -v /dbdata --name test ubuntu:18.04
+
+# 通过--volumes-from来挂载其他容器中挂载的数据卷, 此时test1将test中的数据卷挂到了自己的容器中（在/dbdata目录下）
+docker run -it --volumes-from test --name test1 ubuntu:18.04
+
+# 上述两个容器现在共享这个普通数据卷，数据卷中的数据在任何容器中被改动，都会在这这些容器中同时生效
+
+# --volumes-from支持多个容器的多个数据卷的挂载
+```
 
 ## 4 端口映射与容器互联
 
@@ -938,5 +990,44 @@ Docker挂载数据卷的默认权限是读写（rw），用户也可以通过ro�
 
 ### 4.1 容器与宿主机器的端口映射
 
-在通过`create`或者`run`命令创建一个容器的时候，可以通过参数`P`或`p`来指定容器与宿主机的端口映射。
+​		在通过`create`或者`run`命令创建一个容器的时候，可以通过参数`P`或`p`来指定容器与宿主机的端口映射。当使用-P（大写的）标记时，Docker会随机映射一个49000～49900的端口到内部容器开放的网络端口，-p（小写的）则可以指定要映射的端口，并且，在一个指定端口上只可以绑定一个容器。多次使用-p标记可以绑定多个端口。
 
+​		可以使用IP：HostPort：ContainerPort格式指定映射使用一个特定地址，比如localhost地址127.0.0.1：
+
+```shell
+docker run -d -p 127.0.0.1:5000:5000 training/webapp python app.py
+```
+
+​		使用IP：ContainerPort绑定localhost的任意端口到容器的5000端口，本地主机会自动分配一个端口：
+
+```shell
+docker run -d -p 127.0.0.1::5000 training/webapp python app.py
+```
+
+​		还可以使用udp标记来指定udp端口：
+
+```shell
+docker run -d -p 127.0.0.1:5000:5000/udp training/webapp python app.py
+```
+
+​		查看映射端口配置
+
+```shell
+# 使用docker port来查看当前映射的端口配置，也可以查看到绑定的地址：
+
+docker port nostalgic_morse 5000
+
+127.0.0.1:49155.
+```
+
+### 4.2 单机容器互联
+
+​		容器的互联（linking）是一种让多个容器中的应用进行快速交互的方式。它会在源和接收容器之间创建连接关系，接收容器可以通过容器名快速访问到源容器，而不用指定具体的IP地址。
+
+​		`run`命令的`--link`参数可以让容器之间安全地进行交互。`--link`参数的格式为`--link name：alias`，其中name是要链接的容器的名称，alias是别名。
+
+```shell
+# 在执行docker[container]run的时候如果添加——rm标记，则容器在终止后会立刻删除。注意，——rm和-d参数不能同时使用
+# 用户可以链接多个子容器到父容器，比如可以链接多个web到同一个db容器上
+docker run --rm --name web2 --link db:db training/webapp env
+```
