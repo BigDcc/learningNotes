@@ -1,0 +1,20 @@
+shell脚本调用mysql
+
+```shell
+#! /bin/bash
+
+export MYSQL_PWD=123456789  # 防止mysql提示：mysql: [Warning] Using a password on the command line interface can be insecure
+
+user=root
+host=127.0.0.1
+port=3306
+db=mysql
+
+mysqlRes=$(timeout 1 mysql -h${host} -P${port} -D${db} -u${user} -e 'select version();') 
+
+if [ mysqlRes -eq 'version() 5.7.30' ];then
+	echo "normal db"
+else
+	echo "db exception"
+fi
+```
