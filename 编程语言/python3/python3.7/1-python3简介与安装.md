@@ -1,4 +1,4 @@
-# 1. python3简介与安装
+#  1. python3简介与安装
 
 [TOC]
 
@@ -14,11 +14,25 @@
 
 ### 1.1.2 脚本与程序
 
-　　python语言通常被描述为脚本语言，初次接触编程的同学可能会疑惑，人们常说的脚本语言是什么？这里引用《python学习手册》中的一句话来解释下脚本和程序：  
+　　python语言通常被描述为脚本语言，初次接触编程的同学可能会疑惑，人们常说的脚本语言是什么？这里引用《python学习手册》中的一句话来解释下脚本和程序：
 
-> “脚本”往往倾向于描述简单的顶层代码文件，而“程序”则用来描述那些相对复杂一些的多文件应用。  
+> “脚本”往往倾向于描述简单的顶层代码文件，而“程序”则用来描述那些相对复杂一些的多文件应用。
 
 　　其实在我看来python既可以充当脚本，也可以构建大型程序。
+
+**tip:**
+
+> 在运行shell脚本时，我们经常为脚本传参，这在python中也是可以实现的，通过标准库sys中的argv变量即可
+>
+> ```python
+> # hello.py文件内容
+> # import sys
+> # print(sys.argv)
+>
+> # 调用python脚本
+> $ python hello.py 1 2 3  # 在使用脚本方式时，argv中的第一个参数为脚本名，其他调用方式，不一定是脚本名
+> ['hello.py', '1', '2', '3']
+> ```
 
 ### 1.1.3 python3
 
@@ -26,7 +40,7 @@
 
 ### 1.1.4 python之禅
 
-　　Python语言是优雅的，简单的，这里我们通过交互命令行，查看python程序的设计哲学 
+　　Python语言是优雅的，简单的，这里我们通过交互命令行，查看python程序的设计哲学
 
 ```python
 import this
@@ -35,7 +49,6 @@ import this
 
 """
 The Zen of Python, by Tim Peters
-
 Beautiful is better than ugly.
 Explicit is better than implicit.
 Simple is better than complex.
@@ -67,15 +80,15 @@ Namespaces are one honking great idea -- let's do more of those!
 
 ### 1.1.6 python的标准实现方式的执行模型简介
 
-　　目前python的标准实现方式是Cpython，换句话说从官方下载的python，里面的解释器用的就是Cpython，所以我们这里简单的介绍下它的执行模型。  
+　　目前python的标准实现方式是Cpython，换句话说从官方下载的python，里面的解释器用的就是Cpython，所以我们这里简单的介绍下它的执行模型。
 
 　　首先要明确的一点是，python严格的来说并不是解释性语言，它跟java一样是基于虚拟机的语言。所以单纯的以编译，解释来划分语言类型有点模糊。在标准实现下，python程序的执行过程是这样的，先将源代码编译为字节码的形式，之后再将字节码解释执行。如下图所示：
 
-![解释器模型](./res/002.png)  
+![解释器模型](./res/002.png)
 
-　　上图是python学习手册里面的一个配图，大致概括了执行模型，但是值得注意的是，解释器在加载源码生成字节码的过程中首先是发生在内存中的，根据Code Block生成pyCodeObject对象（可以理解为是字节码），而Code Block的划分是根据命名空间规则划分的，内存中的pyCodeObject对象被PVM加载执行，而PVM是python解释器的运行时引擎，是解释器的最后一个步骤，本质上是一个大循环，目的就是迭代运行字节码指令。在程序运行完以后，如果python解释器拥有对磁盘的写入权限，它会将内存中导入模块（import）的pyCodeObject对象，持久化到源码目录下的__pycache__目录下（python3.2版本以及以后的版本pyc文件都会这样生成在源码目录下），生成后缀为.pyc的文件，方便下次运行程序时复用这些字节码文件，加速程序的启动运行速度。  
+　　上图是python学习手册里面的一个配图，大致概括了执行模型，但是值得注意的是，解释器在加载源码生成字节码的过程中首先是发生在内存中的，根据Code Block生成pyCodeObject对象（可以理解为是字节码），而Code Block的划分是根据命名空间规则划分的，内存中的pyCodeObject对象被PVM加载执行，而PVM是python解释器的运行时引擎，是解释器的最后一个步骤，本质上是一个大循环，目的就是迭代运行字节码指令。在程序运行完以后，如果python解释器拥有对磁盘的写入权限，它会将内存中导入模块（import）的pyCodeObject对象，持久化到源码目录下的__pycache__目录下（python3.2版本以及以后的版本pyc文件都会这样生成在源码目录下），生成后缀为.pyc的文件，方便下次运行程序时复用这些字节码文件，加速程序的启动运行速度。
 
-　　而字节码是什么? 字节码是一种低级的与平台无关的表现形式，它的持久化，只发生在导入模块身上。剩下的顶层执行文件都是每次加载时重新生成pyCodeObject。具体复用的原则可以查看下图片中的示例  
+　　而字节码是什么? 字节码是一种低级的与平台无关的表现形式，它的持久化，只发生在导入模块身上。剩下的顶层执行文件都是每次加载时重新生成pyCodeObject。具体复用的原则可以查看下图片中的示例
 
 ![解释器模型演示](./res/003.png)
 
@@ -103,7 +116,7 @@ Jython是运行在Java平台上的Python解释器，可以直接把Python代码�
 5. **IronPython**
     IronPython和Jython类似，只不过IronPython是运行在微软.Net平台上的Python解释器，可以直接把Python代码编译成.Net的字节码。
 
-  
+
 
 　　PyPy是一个非常值得关注的python实现，PyPy与CPython实现的主要区别在于以下几个方面。
 - 使用垃圾回收，而不是引用计数；
@@ -112,11 +125,32 @@ Jython是运行在Java平台上的Python解释器，可以直接把Python代码�
 
 ### 1.1.8 Python的两种执行方式
 
+​		**交互式和文本式**
+
 　　交互式和文件式，交互式类似在Linux中输入命令的形式，只不过需要在python的解释器环境下进行，而文件式运行，就是把代码写在一个以.py结尾的文件中，然后通过解释器运行这个文件。（虽然Linux中文件的后缀不是必须的，但是加上后缀有助于一些IDE的语法高亮，以及项目中的文件辨识）
 
-![运行python1](./res/004.png)
+```shell
+# 交互式演示
 
-![运行python2](./res/005.png)
+Python 3.8.3 (default, May 29 2020, 00:00:00)
+[GCC 10.1.1 20200507 (Red Hat 10.1.1-1)] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> "hello world!"
+'hello world!'
+
+# 文件式演示
+$ echo 'print("hello world!")' > hello.py
+$ python hello.py
+hello world!
+```
+
+​		python运行代码还支持一种方式，即通过解释器直接执行python代码，`python -c command [args]`
+
+```python
+python -c 'print("hello world!")' # 由于 Python 代码中经常会包含对终端来说比较特殊的字符，通常情况下都建议用英文单引号把 command 括起来
+
+# res => hello world!
+```
 
 ### 1.1.9 python程序的组成
 
@@ -128,13 +162,13 @@ Jython是运行在Java平台上的Python解释器，可以直接把Python代码�
 
 4. 表达式创建并处理对象。
 
-5. 表达式：对象与运算符相结合，并被python在执行时计算为一个值。  
+5. 表达式：对象与运算符相结合，并被python在执行时计算为一个值。
 
    > 语句是可以单独执行的、能够产生实际效果的代码；而表达式则是包含在语句中，根据某种条件计算出一个值或得出某种结果，然后由语句去判断和处理的代码。
 
 ### 1.1.10 代码编写规范
 
-　　python遵循PEP8编写规范（PEP的全称是Python改进提案（Python Enhancement Proposal，PEP），PEP是其中一项建议），它规定了很多书写代码的规范，请你遵照它的建议开始你的python之路。（其中包括命名规范与代码风格）  
+　　python遵循PEP8编写规范（PEP的全称是Python改进提案（Python Enhancement Proposal，PEP），PEP是其中一项建议），它规定了很多书写代码的规范，请你遵照它的建议开始你的python之路。（其中包括命名规范与代码风格）
 
 　　PEP8官方文档阅读地址：（全英文）
 <https://www.python.org/dev/peps/pep-0008/>
@@ -180,101 +214,13 @@ Jython是运行在Java平台上的Python解释器，可以直接把Python代码�
 
 - 常量命名应全部使用大写字母，单词之间可以用下划线分割；
 
-## 1.2 安装python3
-
-　　要开始学习Python编程，首先就得把Python安装到你的电脑里。安装后，你会得到Python解释器（就是负责运行Python程序的,可以看作是代码与计算机硬件之间的一个软件逻辑层，官方的python解释器用C语言实现，名为Cpython），一个命令行交互环境，还有一个简单的集成开发环境(他的名字叫做IDLE)。当然还包括一些依赖的库和相关库文件的文档，以及Python文档。  
-
-　　因为Python是跨平台的(其实是解释器跨平台)，它可以运行在Windows、Mac和各种Linux/Unix系统上（即：在Windows上写Python程序，放到Linux上也是能够运行的），所以python的安装又可分为windows下安装，Mac下安装，Linux下安装。
-
-### 1.2.1 在windows下安装python3
-
-#### 1.2.1.1 下载python3
-
-　　这里安装的是python3.7.1
-
-　　首先进入官方的下载界面
-
-![官方下载界面](./res/007.png)
-
-　　在页面底部选择对应的版本进行下载，推荐选择可执行文件,进行下载，版本与你的windows版本一致即可（64位系统，要下载64可执行程序，32位的系统，下载32的可执行文件即可）
-
-![下载python安装包](./res/008.png)
-
-#### 1.2.1.2 安装python3
-
-　　在安装时可以选择自定义安装和默认安装方式，如下图，上面的是默认安装，下面的是自定义安装。根据需要进行安装即可,一般推荐自定义安装。在自定义安装中，基本都是next即可，有一点需要注意的是，你安装的时候，可以为电脑中所有用户都安装这个环境，如果有需要，勾选中即可，当然你忘记了也没有什么关系。
-
-![安装python](./res/009.png)
-
-　　安装好后，试一试python是否安装成功。
-
-![输出python版本](./res/010.png)
-
-　　当然你也可以直接进入到交互模式中查看python的版本号
-
-![进入交互模式](./res/011.png)
-
-#### 1.2.1.3 输出hello world
-
-　　当你上面的都顺利进行完以后，你可以在交互模式中，编写一个简单的小程序，为你的python之旅开启一个良好的开端。（cmd控制台中，输入python进入交互模式）（传说它可以为你带来好运啊！）
-
-![hello world](./res/012.png)
-
-　　当你顺利的输出了这个语句的时候，证明你的python环境无误的安装成功了，你可以进一步的开始你的学习之旅了。（在交互式命令行下输出是不需要额外的使用print函数的，交互式命令行在python语言中是很重要的调试测试工具，可以快速的验证进行一些验证和测试）
-
-> `>>> `：意味着输出来自终端会话（Cpython解释器的提示符）。
-
-#### 1.2.1.4 手动配置环境变量
-
-　　在交互命令行中，你无法运行python，可能是安装时没有勾选添加环境变量的选择，导致你在控制台中输入python后，控制台提示你，类似没有发现该命令的一些提示，不要慌，这里教你如何手动配置环境变量。（当然老旧的版本的安装程序时不提供自动配置的，所以这个小节的配置还是很重要的）
-
-　　1. 首先计算机右键属性
-
-![计算机属性](./res/013.png)
-
-　　2.  选择高级系统设置
-
-![高级系统设置](./res/014.png)
-
-　　3. 选择环境变量
-
-![环境变量](./res/015.png)
-
-　　4. 编辑系统环境变量path
-
-![设置环境变量](./res/016.png)
-
-　　5. 将你的pyhton安装路径添加进去即可（第一行第二行都要添加）
-
-![设置环境变量](./res/017.png)
-
-### 1.2.2 在linux下安装python3
-
-　　主要针对ubuntu进行安装，ubuntu和多数的发行版系统都会自带python环境，我使用的20.04版本自带版本为：
-
-```console
-python --version
-Python 3.8.2
-```
-
-　　如果不想使用默认的环境可以自行安装其他的版本,官方文档中提供的是通过编译的方式进行安装，参考如下
-
-<https://docs.python.org/zh-cn/3/using/unix.html>
-
-　　在ubuntu上通过apt进行安装(这种感觉方便一点)，当然通过snap应该也是可以的
-
-```shell
-# 安装python3.7
-sudo apt install python3.7
-```
-
 ## 1.3 IDE的选择
 
 　　IDE 是 Intergreated Development Environment 的缩写，中文称为集成开发环境，用来表示辅助程序员开发的应用软件。IDE是专为程序员设计的，就像白领使用office一样。
 
 　　在开发过程中除了语言本身的必要环境，如解释器，编译器等，往往还需要很多其他辅助软件，例如语言编辑器、自动建立工具、除错器等等。这些工具通常被打包在一起，统一发布和安装，例如PyCharm 等，这种类型的工具就是IDE。
 
-　　需要注意的是，虽然有一些 IDE 支持多种程序语言的开发（如 Eclipse、NetBeans、VS），但通常来说，IDE 主要还是针对某一特定的程序语言而量身打造的（如 VB）。		
+　　需要注意的是，虽然有一些 IDE 支持多种程序语言的开发（如 Eclipse、NetBeans、VS），但通常来说，IDE 主要还是针对某一特定的程序语言而量身打造的（如 VB）。
 
 　　python常用的IDE如下图所示：
 
@@ -297,13 +243,13 @@ sudo apt install python3.7
 
 ```python
 class Test:
-    
+
     def __init__(self, name):
     	self.name = name
-        
+
     def __repr__(self):
         return "This is MagicMethod!"
-    
+
 test = Test("achui")
 print(test)  # This is MagicMethod!
 ```
@@ -318,32 +264,32 @@ print(test)  # This is MagicMethod!
 
 　　内置函数是解释器的一部分，它随着解释器的启动而生效，常驻内存，以下为全部的内置函数
 
-|     |     |     |     |     |
-| --- | --- | --- | --- | --- |
-|abs()|delattr()|hash()|memoryview()|set()|
-|all()|dict()|help()|min()|setattr()|
-|any()|dir()|hex()|next()|slicea()|
-|ascii()|divmod()|id()|object()|sorted()|
-|bin()|enumerate()|input()|oct()|staticmethod()|
-|bool()|eval()|int()|open()|str()|
-|breakpoint()|exec()|isinstance()|ord()|sum()|
-|bytearray()|filter()|issubclass()|pow()|super()|
-|bytes()|float()|iter()|print()|tuple()|
-|callable()|format()|len()|property()|type()|
-|chr()|frozenset()|list()|range()|vars()|
-|classmethod()|getattr()|locals()|repr()|zip()|
-|compile()|globals()|map()|reversed()|__import__()|
-|complex()|hasattr()|max()|round()|
+|               |             |              |              |                |
+| ------------- | ----------- | ------------ | ------------ | -------------- |
+| abs()         | delattr()   | hash()       | memoryview() | set()          |
+| all()         | dict()      | help()       | min()        | setattr()      |
+| any()         | dir()       | hex()        | next()       | slicea()       |
+| ascii()       | divmod()    | id()         | object()     | sorted()       |
+| bin()         | enumerate() | input()      | oct()        | staticmethod() |
+| bool()        | eval()      | int()        | open()       | str()          |
+| breakpoint()  | exec()      | isinstance() | ord()        | sum()          |
+| bytearray()   | filter()    | issubclass() | pow()        | super()        |
+| bytes()       | float()     | iter()       | print()      | tuple()        |
+| callable()    | format()    | len()        | property()   | type()         |
+| chr()         | frozenset() | list()       | range()      | vars()         |
+| classmethod() | getattr()   | locals()     | repr()       | zip()          |
+| compile()     | globals()   | map()        | reversed()   | __import__()   |
+| complex()     | hasattr()   | max()        | round()      |
 
-　　内置函数使用参考如下：  
+　　内置函数使用参考如下：
 
 <https://docs.python.org/zh-cn/3/library/functions.html>
 
 ### 1.4.4 dir()函数的使用
 
-　　在浩如烟海的python库中，面对未知对象的使用总是恐惧的，我们可以通过dir()函数来查看这个对象拥有的方法，然后通过help()去查看一个对象的属性的具体用法，这对于学习来说是至关重要的。当然面向百度，谷歌编程可能比这个更直接一些。  
+　　在浩如烟海的python库中，面对未知对象的使用总是恐惧的，我们可以通过dir()函数来查看这个对象拥有的方法，然后通过help()去查看一个对象的属性的具体用法，这对于学习来说是至关重要的。当然面向百度，谷歌编程可能比这个更直接一些。
 
-　　dir()函数的返回值是一个元素为字符串的列表。而这个列表中返回的内容取决于你为他传入的对象。  
+　　dir()函数的返回值是一个元素为字符串的列表。而这个列表中返回的内容取决于你为他传入的对象。
 
 1. 当传入一个模块对象时，返回的是模块里面所有的属性（变量名和方法）;
 2. 当传入的对象是一个类时，返回这个类及其所有父类（包括父类的父类）的属性和方法；
@@ -424,8 +370,8 @@ print(keyword.kwlist)
 　　输出结果如下所示：
 
 ```console
-['False', 'None', 'True', 'and', 'as', 'assert', 'async','await', 'break', 'class', 'continue', 'def', 'del', 'elif',  
- 'else', 'except', 'finally', 'for', 'from', 'global',  'if', 'import', 'in', 'is', 'lambda', 'nonlocal', 'not', 'or',  
+['False', 'None', 'True', 'and', 'as', 'assert', 'async','await', 'break', 'class', 'continue', 'def', 'del', 'elif',
+ 'else', 'except', 'finally', 'for', 'from', 'global',  'if', 'import', 'in', 'is', 'lambda', 'nonlocal', 'not', 'or',
   'pass', 'raise', 'return', 'try', 'while', 'with', 'yield']
 ```
 
@@ -492,7 +438,7 @@ str1 = "hello world!";print(str1)
 
 #### 1.5.4.1 print()输出函数
 
-　　print()函数可以在终端上显示，传入对象的结果，一般可以传入普通的对象，返回对象的值，传入表达式，输出表达式的结果，传入变量的名称，输出变量引用的对象的值。当然print()中可以接收多个表达式或者对象，变量，用逗号将这些传入的值隔开即可，print()在终端中会将逗号解析为空格显示。  
+　　print()函数可以在终端上显示，传入对象的结果，一般可以传入普通的对象，返回对象的值，传入表达式，输出表达式的结果，传入变量的名称，输出变量引用的对象的值。当然print()中可以接收多个表达式或者对象，变量，用逗号将这些传入的值隔开即可，print()在终端中会将逗号解析为空格显示。
 
 ![print函数演示](./res/023.png)
 
@@ -568,7 +514,7 @@ str1 = "hello world!";print(str1)
 
 5. 变量名不能使用关键字和保留字;
 
-   
+
 
 ```python
 name = "achui"
@@ -663,7 +609,7 @@ print(list1)  # NameError: name 'list1' is not defined
 
 ### 1.6.3 共享引用
 
-　　多个变量引用同一个对象的现象被称为共享引用，图示如下：  
+　　多个变量引用同一个对象的现象被称为共享引用，图示如下：
 　　
 ![共享引用](./res/028.png)
 

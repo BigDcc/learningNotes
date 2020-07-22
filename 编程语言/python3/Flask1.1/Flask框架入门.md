@@ -2,55 +2,21 @@
 
 ## 1 Flask框架介绍
 
-### 1.1 Flask简介
+### 1.1 Flask框架
 
-- Flask是使用Python编写的Web微框架，Flask仅保留了Web框架的核心，其他的功能都交给扩展实现；
-
-- Web框架的主要作用是让我们不用关心底层的请求响应处理，更方便高效地编写Web程序；
-
-- 因为Flask核心简单且易于扩展，所以被称作微框架（micro framework）；
+- Flask是使用Python编写的Web微框架，Web框架可以让我们不用关心底层的请求响应处理，更方便高效地编写Web程序。Flask是使用Python编写的Web微框架，Flask仅保留了Web框架的核心，其他的功能都交给扩展实现；
 
 - Flask有两个主要依赖：一个是WSGI工具集（Web Server Gateway Interface，Web服务器网关接口）,基于Werkzeug工具实现；另一个是Jinja2模板引擎Flask只保留了Web开发的核心功能，其他的功能都由外部扩展来实现，比如数据库集成、表单认证、文件上传等；
 
-- Werkzeug是德语单词“工具（tool）， Jinja指日本神社，因为神社（庙）的英文temple与template（模板）相近而得名。WSGI（Web Server Gateway Interface）是Python中用来规定Web服务器如何与Python Web程序进行沟通的标准；
+**注意事项：**
 
-
+> Werkzeug是德语单词“工具（tool）， Jinja指日本神社，因为神社（庙）的英文temple与template（模板）相近而得名;
+>
+> WSGI（Web Server Gateway Interface）是Python中用来规定Web服务器如何与Python Web程序进行沟通的标准;
 
 ![flask框架](./res/001.png)
 
 
-
-### 1.2 环境搭建
-
-​		常见的构建开发环境的包管理方式有如下三种，可以根据实际需要进行选择。
-
-#### 1.2.1 pip&venv&requirements.txt
-
-#### 1.2.2 pipenv
-
-#### 1.2.3 docker
-
-
-
-1.1 搭建开发环境
-
-Pipenv是基于pip的Python包管理工具
-
-它的出现解决了旧的pip+virtualenv+requirements.txt的工作方式的弊端
-
-$ pip install <某个包的名称>
-
-这会从PyPI（Python P
-
-Package
-
-Index，Python包索引）上下载并安装指定的包。
-
-PyPI（[https://pypi.org](https://pypi.org/)）是一个Python包的在线仓库，截至2018年5月，共有13万多个包存储在这里。
-
-现在使用pip安装Pipenv：
-
-$ pip install pipenv
 
 1.2 Hello，Flask！
 
