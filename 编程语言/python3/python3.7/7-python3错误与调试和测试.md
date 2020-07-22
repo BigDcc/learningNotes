@@ -1,50 +1,77 @@
-# ***\*7\**** ***\*错误、调试和测试\****
+# 7 错误、调试和测试
 
-## ***\*7\*******\*.1 python\*******\*中的错误\****
+## 7.1 python中的错误
 
-### ***\*7\*******\*.1.1 bug\****
+### 7.1.1 错误的分类
 
-有的错误是程序编写有问题造成的，比如本来应该输出整数结果输出了字符串，这种错误我们通常称之为bug，bug是必须修复的。
+​		编写程序时遇到的错误可大致分为 2 类，分别为**语法错误**和**运行时错误**
 
-### ***\*7\*******\*.1.2 用户操作错误\****
+- 语法错误多是开发者疏忽导致的，属于真正意义上的错误，是解释器无法容忍的，因此，只有将程序中的所有语法错误全部纠正，程序才能执行;
+- 运行时产生错误的情况叫做**异常(Exceptions)**当一个程序发生异常时，代表该程序在执行时出现了非正常的情况，无法再执行下去。默认情况下，程序是要终止的;
 
-有的错误是用户输入造成的，比如让用户输入email地址，结果得到一个空字符串，这种错误可以通过检查用户输入来做相应的处理。（在web开发时可以通过前端程序和后台程序分别进行验证）
+### 7.1.2 语法错误
 
-### ***\*7\*******\*.1.3 异常\****
+​		通常语法错误，都会引发`SyntaxError`
 
-还有一类错误是完全无法在程序运行过程中预测的，比如写入文件的时候，磁盘满了，写不进去了，或者从网络抓取数据，网络突然断掉了,程序出现索引越界,变量引用时未定义等，这类错误也称为异常，在程序中通常是必须处理的，否则，程序会因为各种问题终止并退出。
+```console
+# 在Python3的解释器中使用python2的语法引发报错
 
-## ***\*7\*******\*.2\**** ***\*异常\****
+In [1]: print "hello"
+  File "<ipython-input-3-2a0eaa89f43f>", line 1
+    print "hello"
+          ^
+SyntaxError: Missing parentheses in call to 'print'. Did you mean print("hello")?
+```
 
-还记得我们介绍的tracebake记录吗，Python内置了一套异常处理机制，来帮助我们进行错误处理。如果异常只能用来显示错误消息，就没多大意思了。事实上，每个异常都是某个具体的异常类的实例。你能以各种方式引发和捕获这些实例，从而逮住错误并采取措施，而不是放任整个程序失败。这也是为什么python会给出一套完整的异常处理的工具。
+### 7.1.3 异常错误
 
-Python的异常处理涉及到的语句如下所示:
+​		在运行时可以产生很多种异常错误，通常分为以下三大类，我们通常所指的异常就是第三种类型：
 
- 
+1.  **bug:** 有的错误是程序编写有问题造成的，比如本来应该输出整数结果输出了字符串，这种错误我们通常称之为bug，bug是必须修复的;
+2.  **用户操作错误**: 有的错误是用户输入造成的，比如让用户输入email地址，结果得到一个空字符串，这种错误可以通过检查用户输入来做相应的处理;(在web开发时可以通过前端程序和后台程序分别进行验证)
+3.  **异常**: 还有一类错误是完全无法在程序运行过程中预测的，比如写入文件的时候，磁盘满了，写不进去了，或者从网络抓取数据，网络突然断掉了,程序出现索引越界,变量引用时未定义等，这类错误也称为异常，在程序中通常是必须处理的，否则，程序会因为各种问题终止并退出;
 
-![img](file:////tmp/wps-achui/ksohtml/wpsbVxvbz.jpg) 
+## 7.2 异常
 
-### ***\*7\*******\*.2.1 异常\****
+​		还记得我们介绍的tracebake记录吗，Python内置了一套异常处理机制，来帮助我们进行错误处理。如果异常只能用来显示错误消息，就没多大意思了。事实上，每个异常都是某个具体的异常类的实例。你能以各种方式引发和捕获这些实例，从而逮住错误并采取措施，而不是放任整个程序失败。这也是为什么python会给出一套完整的异常处理的工具。
 
-#### ***\*7\*******\*.2.2.1\**** ***\*异常简介\****
+​		异常中涉及到的关键字如下所示，主要包块`try`,  `except`，`else`， `finally`：
 
-Python使用被称为异常的特殊对象来管理程序执行期间发生的错误，每当发生让python不知所措的错误时，他都会创建一个异常对象，如果你编写了处理异常的代码，程序将继续运行，如果你没有对异常进行处理，程序将会停止，并显示一个traceback,其中包含有关异常的报告。这通常不是我们想要的。
+```python
+    try:
+        可能产生异常的代码块
+    except [ (Error1, Error2, ... ) [as e] ]:
+        处理异常的代码块1
+    except [ (Error3, Error4, ... ) [as e] ]:
+        处理异常的代码块2
+    except  [Exception]:
+        处理其它异常
+    else:
+        pass
+    finally:
+        pass
+```
+### 7.2.1 异常的正式介绍
 
-高级语言通常都内置了一套***\*try...except...\****的错误处理机制，Python也不例外。这个处理机制可以帮助我们在异常发生时，不中断程序的运行。
+#### 7.2.2.1异常简介
+
+​		Python使用被称为异常的特殊对象来管理程序执行期间发生的错误，每当发生让python不知所措的错误时，他都会创建一个异常对象，如果你编写了处理异常的代码，程序将继续运行，如果你没有对异常进行处理，程序将会停止，并显示一个`traceback`,其中包含有关异常的报告。这通常不是我们想要的，如果要避免程序退出，可以使用捕获异常的方式获取这个异常的名称，再通过其他的逻辑代码让程序继续运行，这种根据异常做出的逻辑处理叫作**异常处理**。
+
+​		高级语言通常都内置了一套`try...except...`的错误处理机制，Python也不例外。这个处理机制可以帮助我们在异常发生时，不中断程序的运行。
 
 try except 语句的执行流程如下：
 
-1）首先执行 try 中的代码块，如果执行过程中出现异常，系统会自动生成一个异常类型，并将该异常提交给 Python 解释器，此过程称为捕获异常。
+1. 首先执行 try 中的代码块，如果执行过程中出现异常，系统会自动生成一个异常类型，并将该异常提交给 Python 解释器，此过程称为**捕获异常**。
 
-2）当 Python 解释器收到异常对象时，会寻找能处理该异常对象的 except 块，如果找到合适的 except 块，则把该异常对象交给该 except 块处理，这个过程被称为处理异常。如果 Python 解释器找不到处理异常的 except 块，则程序运行终止，Python 解释器也将退出。
+2. 当 Python 解释器收到异常对象时，会寻找能处理该异常对象的 except 块，如果找到合适的 except 块，则把该异常对象交给该 except 块处理，这个过程被称为**处理异常**。如果 Python 解释器找不到处理异常的 except 块，则程序运行终止，Python 解释器也将退出。
 
 以下我们对异常处理语句进行一下详解：（以下内容是完整的异常格式）
 
-![img](file:////tmp/wps-achui/ksohtml/wps8ZsNsx.jpg) 
+![img](file:////tmp/wps-achui/ksohtml/wps8ZsNsx.jpg)
 
 当我们认为某些代码可能会出错时，就可以用try来运行这段代码，如果执行出错，则后续代码不会继续执行，而是直接跳转至错误处理代码，即except语句块，如果执行没有出错我们就会跳转到else代码块，执行其中的内容。无论是执行出错还是执行正确，在执行完对应代码块后，如果有finally语句块，则执行finally语句块，至此，执行完毕。
 
-![img](file:////tmp/wps-achui/ksohtml/wpsAvkgUA.jpg) 
+![img](file:////tmp/wps-achui/ksohtml/wpsAvkgUA.jpg)
 
 else和finally是不必要的代码块，即可以加入也可以不加到程序当中。当出现else语句时，最少要搭配一个except语句。同时else语句和finally语句应当只出现一次。
 
@@ -54,11 +81,11 @@ else和finally是不必要的代码块，即可以加入也可以不加到程序
 
 异常处理时大致符合下图的执行流程：
 
-![img](file:////tmp/wps-achui/ksohtml/wps9iVbky.jpg) 
+![img](file:////tmp/wps-achui/ksohtml/wps9iVbky.jpg)
 
 ​	异常类和其实例采用继承的原则在类树中搜索，相应的异常进行异常抛出，我们通过except去处理异常，或者交由python解释器的异常处理器去处理异常，从而终端程序，异常的继承体系如下所示：
 
-![img](file:////tmp/wps-achui/ksohtml/wpsyHcemA.jpg) 
+![img](file:////tmp/wps-achui/ksohtml/wpsyHcemA.jpg)
 
 ​	异常只应该用于处理非正常的情况，不要使用异常处理来代替正常的流程控制。对于一些完全可预知，而且处理方式清楚的错误，程序应该提供相应的错误处理代码，而不是将其笼统地称为异常。
 
@@ -66,7 +93,7 @@ else和finally是不必要的代码块，即可以加入也可以不加到程序
 
 通常我们在最后一个except语句中捕获所有异常，防止异常抛掷到程序最顶层已发异常管理器中断程序。捕获所有异常有以下两种方式：
 
-![img](file:////tmp/wps-achui/ksohtml/wpsCuYgzz.jpg) 
+![img](file:////tmp/wps-achui/ksohtml/wpsCuYgzz.jpg)
 
 ​	空的except语句可以捕获一切的异常包括，系统异常所引发的异常，而Exception可以只捕获程序本身的异常。（可以在继承的图示中了解到这一原则）
 
@@ -86,15 +113,15 @@ else和finally是不必要的代码块，即可以加入也可以不加到程序
 
 示例如下所示：
 
-![img](file:////tmp/wps-achui/ksohtml/wpsdXUb4x.jpg) 
+![img](file:////tmp/wps-achui/ksohtml/wpsdXUb4x.jpg)
 
 ​	不带异常名称的raise语句或是额外数据值的raise语句可以重新引发当前异常。
 
-![img](file:////tmp/wps-achui/ksohtml/wpsRuTk5x.jpg) 
+![img](file:////tmp/wps-achui/ksohtml/wpsRuTk5x.jpg)
 
 以下引用异常实例的两种方法，第一种是隐式的创建异常实例，第二种是显示的创建异常实例。
 
-![img](file:////tmp/wps-achui/ksohtml/wps4jVAhA.jpg) 
+![img](file:////tmp/wps-achui/ksohtml/wps4jVAhA.jpg)
 
 ### ***\*7\*******\*.2.4\**** ***\*获取异常信息\****
 
@@ -108,11 +135,11 @@ exc_info()方法会将当前的异常信息以元组的形式返回，该元组�
 
 3）raceback：是一个 traceback 对象。
 
-![img](file:////tmp/wps-achui/ksohtml/wpsFoyStx.jpg) 
+![img](file:////tmp/wps-achui/ksohtml/wpsFoyStx.jpg)
 
 ​	通过traceback 模块的print_tb方法可以解析exc_info()结果元组中的最后一个对象所包含的信息。
 
-![img](file:////tmp/wps-achui/ksohtml/wpsFYHxYx.jpg) 
+![img](file:////tmp/wps-achui/ksohtml/wpsFYHxYx.jpg)
 
 #### ***\*7\*******\*.2.4.2\**** ***\*处理异常信息时获取更多信息\****
 
@@ -124,7 +151,7 @@ exc_info()方法会将当前的异常信息以元组的形式返回，该元组�
 
 3）repr(e)：返回较全的异常信息，包括异常信息的类型。
 
-![img](file:////tmp/wps-achui/ksohtml/wpszBzioA.jpg) 
+![img](file:////tmp/wps-achui/ksohtml/wpszBzioA.jpg)
 
 ### ***\*7\*******\*.2.5 assert\*******\*语句\****
 
@@ -134,7 +161,7 @@ assert 语句的完整语法格式为：
 
 assert 条件表达式 [,描述信息]
 
-![img](file:////tmp/wps-achui/ksohtml/wpsO1lYNz.jpg) 
+![img](file:////tmp/wps-achui/ksohtml/wpsO1lYNz.jpg)
 
 ### 3.1.4 断言语句
 
@@ -164,21 +191,21 @@ assert 条件表达式 [,描述信息]
 
 凡是用print()来辅助查看的地方，都可以用断言（assert）来替代，但是程序中如果到处充斥着assert，和print()相比也好不到哪去。不过，启动Python解释器时可以用-O参数来关闭assert。关闭后，你可以把所有的assert语句当成pass来看。下面我们来做一个实例看一下。
 
-![img](file:////tmp/wps-achui/ksohtml/wpsyahasB.jpg) 
+![img](file:////tmp/wps-achui/ksohtml/wpsyahasB.jpg)
 
 ### ***\*7\*******\*.3.3\**** ***\*logging模块调试\****
 
 ***\*通过引入l\*******\*ogging\*******\*模块来使用日志调试。\****
 
-![img](file:////tmp/wps-achui/ksohtml/wpsKe8TTx.jpg) 
+![img](file:////tmp/wps-achui/ksohtml/wpsKe8TTx.jpg)
 
 ***\*通过 logging.debug() 函数可以打印日志信息。\****
 
-![img](file:////tmp/wps-achui/ksohtml/wps7Gvtzx.jpg) 
+![img](file:////tmp/wps-achui/ksohtml/wps7Gvtzx.jpg)
 
 ***\*Logging\*******\*日志的日志级别如下所示：\****
 
-![img](file:////tmp/wps-achui/ksohtml/wpsbC2vQx.jpg) 
+![img](file:////tmp/wps-achui/ksohtml/wpsbC2vQx.jpg)
 
 日志级别的好处在于，我们可以改变想看到的日志消息的优先级。比如说，向 basicConfig() 函数传入 logging.DEBUG 作为 level 关键字参数，这将显示所有级别为 DEBUG 的日志消息。当开发了更多的程序后，我们可能只对错误感兴趣，在这种情况下，可以将 basicConfig() 的 level 参数设置为 logging.ERROR，这将只显示 ERROR 和 CRITICAL 消息，跳过 DEBUG、INFO 和 WARNING 消息。
 
@@ -186,13 +213,13 @@ assert 条件表达式 [,描述信息]
 
 在调试完程序后，可能并不希望所有这些日志消息出现在屏幕上，这时就可以使用 logging.disable() 函数禁用这些日志消息，从而不必进入到程序中，手工删除所有的日志调用。logging.disable() 函数的用法是，向其传入一个日志级别，它会禁止该级别以及更低级别的所有日志消息。因此，如果想要禁用所有日志，只要在程序中添加 logging.disable(logging.CRITICAL) 即可。
 
-![img](file:////tmp/wps-achui/ksohtml/wpsD99pWA.jpg) 
+![img](file:////tmp/wps-achui/ksohtml/wpsD99pWA.jpg)
 
 ***\*保存日志文件\****
 
 将日志消息输出到文件中的实现方法很简单，只需要设置 logging.basicConfig() 函数中的 filename 关键字参数即可。
 
-![img](file:////tmp/wps-achui/ksohtml/wps7ZWYhA.jpg) 
+![img](file:////tmp/wps-achui/ksohtml/wps7ZWYhA.jpg)
 
 ### ***\*7\*******\*.3.\*******\*4\**** ***\*其他调试方法\****
 
@@ -212,11 +239,11 @@ assert 条件表达式 [,描述信息]
 
 以下我们做一个实例：
 
-![img](file:////tmp/wps-achui/ksohtml/wpsGxyKwA.jpg) 
+![img](file:////tmp/wps-achui/ksohtml/wpsGxyKwA.jpg)
 
-![img](file:////tmp/wps-achui/ksohtml/wps4trBUA.jpg) 
+![img](file:////tmp/wps-achui/ksohtml/wps4trBUA.jpg)
 
-![img](file:////tmp/wps-achui/ksohtml/wpsCp7oFz.jpg) 
+![img](file:////tmp/wps-achui/ksohtml/wpsCp7oFz.jpg)
 
 以上是测试单个函数的实例，有时候我们需要测试整个类中的某些方法，具体步骤跟以上类似，但是，你需要在测试的时候，将类实例化，通过对象调用这些方法，进行测试。断言方法用来核实得到的结果是否与期望的结果一致。
 
