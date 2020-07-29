@@ -1,6 +1,6 @@
 {
     // install extension from extension-id
-    "recommendations" :[
+    "recommendations": [
         "alefragnani.project-manager",
         "DavidAnson.vscode-markdownlint",
         "liviuschera.noctis",
