@@ -21,5 +21,12 @@
 
 　　python中涉及到了很多优秀的轮子，可以查看[Awesome-Python](https://github.com/vinta/awesome-python)。
 
+《python学习手册（第五版）》& 《python袖珍指南》: 涵盖了python3.3的基础语言内容
+《python编程》: 涵盖了使用python进行python编程的一些基本内容
 
+
+
+
+
+python版本演进 -> 查看python官方网站的不同发布版本中的`What`s New in Python`
 
